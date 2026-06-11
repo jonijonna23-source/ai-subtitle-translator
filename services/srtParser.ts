@@ -2,12 +2,15 @@ import { SRTBlock } from '../types';
 
 export interface ParseResult {
   blocks: SRTBlock[];
-  format: 'srt' | 'vtt' | 'ass';
+  format: 'srt' | 'vtt' | 'ass' | 'txt';
   rawLines: string[];
 }
 
-export const detectFormat = (content: string, filename: string): 'srt' | 'vtt' | 'ass' => {
+export const detectFormat = (content: string, filename: string): 'srt' | 'vtt' | 'ass' | 'txt' => {
   const ext = filename.split('.').pop()?.toLowerCase();
+  if (ext === 'txt') {
+    return 'txt';
+  }
   if (ext === 'vtt' || content.trim().startsWith('WEBVTT')) {
     return 'vtt';
   }
@@ -81,6 +84,23 @@ export const parseSubtitle = (content: string, filename: string): ParseResult =>
         }
       }
     }
+  } else if (format === 'txt') {
+    // Parse Plaintext File line-by-line
+    let index = 0;
+    for (let i = 0; i < rawLines.length; i++) {
+      const line = rawLines[i].trim();
+      if (line) {
+        blocks.push({
+          id: String(index + 1),
+          timeRange: `Line ${i + 1}`,
+          text: line,
+          originalText: line,
+          status: 'pending',
+          originalIndex: i
+        });
+        index++;
+      }
+    }
   } else {
     // Parse Standard SRT
     const rawBlocks = normalized.trim().split(/\n\s*\n/);
@@ -108,10 +128,21 @@ export const parseSubtitle = (content: string, filename: string): ParseResult =>
 
 export const stringifySubtitle = (
   blocks: SRTBlock[],
-  format: 'srt' | 'vtt' | 'ass',
+  format: 'srt' | 'vtt' | 'ass' | 'txt',
   originalRawLines?: string[]
 ): string => {
-  if (format === 'ass' && originalRawLines) {
+  if (format === 'txt' && originalRawLines) {
+    // Reconstruct plain text exactly, replacing ONLY the non-empty lines with their translations
+    const linesCopy = [...originalRawLines];
+    for (const block of blocks) {
+      if (block.originalIndex !== undefined) {
+        linesCopy[block.originalIndex] = block.text;
+      }
+    }
+    return linesCopy.join('\n');
+  } else if (format === 'txt') {
+    return blocks.map(b => b.text).join('\n');
+  } else if (format === 'ass' && originalRawLines) {
     // Full ASS reconstruction: replace Dialogue lines in the exact original position
     const linesCopy = [...originalRawLines];
     for (const block of blocks) {

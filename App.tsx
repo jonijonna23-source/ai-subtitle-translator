@@ -678,20 +678,20 @@ const App: React.FC = () => {
               <div>
                 <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1 flex items-center gap-1.5">
                   <UploadCloud className="w-4 h-4 text-slate-500" />
-                  Upload Subtitle File
+                  Upload Subtitle / Custom Text File
                 </label>
                 <div className="relative border-2 border-dashed border-gray-200 dark:border-slate-700 rounded-lg p-4 hover:border-blue-400 dark:hover:border-blue-500 transition cursor-pointer bg-gray-50 dark:bg-slate-900/60">
                   <input 
                     type="file" 
                     id="file-upload"
-                    accept=".srt,.vtt,.ass" 
+                    accept=".srt,.vtt,.ass,.txt" 
                     onChange={handleFileChange}
                     disabled={state.isProcessing}
                     className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                   />
                   <div className="text-center">
                     <span className="text-sm text-slate-600 dark:text-slate-300 font-medium block">
-                      {file ? file.name : "Select an SRT, VTT, or ASS subtitle file to translate (multiple formats)"}
+                      {file ? file.name : "Select an SRT, VTT, ASS subtitle or a PLAIN TXT file to translate"}
                     </span>
                     <span className="text-xs text-slate-400 dark:text-slate-500 mt-1 block">Drag and drop or browse from your device</span>
                   </div>
@@ -699,7 +699,7 @@ const App: React.FC = () => {
                 {originalBlocks.length > 0 && (
                   <div className="mt-1 flex items-center justify-between">
                     <p className="text-xs text-blue-600 dark:text-blue-400 font-semibold">
-                      Detected {originalBlocks.length} subtitle blocks
+                      Detected {originalBlocks.length} {subtitleFormat === 'txt' ? 'text segments' : 'subtitle blocks'}
                     </p>
                     <span className="text-[10px] uppercase bg-blue-100 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 font-bold px-1.5 py-0.5 rounded">
                       {subtitleFormat} Format

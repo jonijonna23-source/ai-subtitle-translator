@@ -1,6 +1,6 @@
 {
   "name": "SRT AI Translator",
-  "description": "A professional tool to translate subtitle files (.srt) using Gemini, OpenAI or Groq models with batch processing, customized translation options, and real-time progress tracking.",
+  "description": "A professional tool to translate subtitle (.srt, .vtt, .ass) and plaintext (.txt) files using Gemini, OpenAI or Groq models with batch processing, customized translation options, and real-time progress tracking.",
   "requestFramePermissions": [],
   "majorCapabilities": [
     "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
