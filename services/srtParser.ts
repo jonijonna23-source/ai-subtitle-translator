@@ -129,38 +129,55 @@ export const parseSubtitle = (content: string, filename: string): ParseResult =>
 export const stringifySubtitle = (
   blocks: SRTBlock[],
   format: 'srt' | 'vtt' | 'ass' | 'txt',
-  originalRawLines?: string[]
+  originalRawLines?: string[],
+  isBilingual?: boolean
 ): string => {
   if (format === 'txt' && originalRawLines) {
     // Reconstruct plain text exactly, replacing ONLY the non-empty lines with their translations
     const linesCopy = [...originalRawLines];
     for (const block of blocks) {
       if (block.originalIndex !== undefined) {
-        linesCopy[block.originalIndex] = block.text;
+        const textToPut = isBilingual 
+          ? `${block.originalText || ''}\n${block.text}`
+          : block.text;
+        linesCopy[block.originalIndex] = textToPut;
       }
     }
     return linesCopy.join('\n');
   } else if (format === 'txt') {
-    return blocks.map(b => b.text).join('\n');
+    return blocks.map(b => isBilingual ? `${b.originalText || ''}\n${b.text}` : b.text).join('\n');
   } else if (format === 'ass' && originalRawLines) {
     // Full ASS reconstruction: replace Dialogue lines in the exact original position
     const linesCopy = [...originalRawLines];
     for (const block of blocks) {
       if (block.originalIndex !== undefined && block.metaPrefix !== undefined) {
-        linesCopy[block.originalIndex] = `${block.metaPrefix}${block.text}`;
+        const textToPut = isBilingual
+          ? `${block.originalText || ''}\\N${block.text}`
+          : block.text;
+        linesCopy[block.originalIndex] = `${block.metaPrefix}${textToPut}`;
       }
     }
     return linesCopy.join('\n');
   } else if (format === 'vtt') {
     let output = 'WEBVTT\n\n';
     output += blocks
-      .map(b => `${b.id}\n${b.timeRange}\n${b.text}`)
+      .map(b => {
+        const textToPut = isBilingual
+          ? `${b.originalText || ''}\n${b.text}`
+          : b.text;
+        return `${b.id}\n${b.timeRange}\n${textToPut}`;
+      })
       .join('\n\n');
     return output;
   } else {
     // Standard SRT
     return blocks
-      .map(b => `${b.id}\n${b.timeRange}\n${b.text}\n`)
+      .map(b => {
+        const textToPut = isBilingual
+          ? `${b.originalText || ''}\n${b.text}`
+          : b.text;
+        return `${b.id}\n${b.timeRange}\n${textToPut}\n`;
+      })
       .join('\n');
   }
 };
