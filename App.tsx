@@ -130,7 +130,7 @@ const App: React.FC = () => {
         return savedProvider;
       }
     }
-    return AIProvider.GEMINI;
+    return AIProvider.GROQ_FREE;
   });
 
   const [apiKey, setApiKey] = useState(() => {
@@ -147,7 +147,7 @@ const App: React.FC = () => {
       const savedModel = localStorage.getItem('saved_model');
       if (savedModel) return savedModel;
     }
-    return PROVIDER_MODELS[AIProvider.GEMINI][0].value;
+    return PROVIDER_MODELS[AIProvider.GROQ_FREE][0].value;
   });
 
   const [targetLang, setTargetLang] = useState('Indonesian');
@@ -585,8 +585,8 @@ const App: React.FC = () => {
                   disabled={state.isProcessing}
                   className="w-full px-4 py-2 border border-gray-200 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-blue-500 transition bg-white dark:bg-slate-800 text-slate-950 dark:text-slate-100 text-sm font-semibold selection:bg-blue-100"
                 >
-                  <option value={AIProvider.GEMINI_FREE}>Google Gemini (Free API Key)</option>
                   <option value={AIProvider.GROQ_FREE}>Groq AI (Free API Key)</option>
+                  <option value={AIProvider.GEMINI_FREE}>Google Gemini (Free API Key)</option>
                   <option value={AIProvider.GEMINI}>Google Gemini (Custom Key)</option>
                   <option value={AIProvider.OPENAI}>OpenAI (Custom Key)</option>
                   <option value={AIProvider.GROQ}>Groq AI (Custom Key)</option>
