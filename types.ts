@@ -1,5 +1,7 @@
 
 export enum AIProvider {
+  GEMINI_FREE = 'GEMINI_FREE',
+  GROQ_FREE = 'GROQ_FREE',
   GEMINI = 'GEMINI',
   OPENAI = 'OPENAI',
   GROQ = 'GROQ'
@@ -31,6 +33,18 @@ export interface ModelOption {
 }
 
 export const PROVIDER_MODELS: Record<AIProvider, ModelOption[]> = {
+  [AIProvider.GEMINI_FREE]: [
+    { value: 'gemini-3.5-flash', label: 'Gemini 3.5 Flash (Fast & Default)' },
+    { value: 'gemini-3.1-pro-preview', label: 'Gemini 3.1 Pro (Advanced Reasoning)' },
+    { value: 'gemini-3.1-flash-lite', label: 'Gemini 3.1 Flash Lite' },
+    { value: 'gemini-2.5-flash-latest', label: 'Gemini 2.5 Flash' }
+  ],
+  [AIProvider.GROQ_FREE]: [
+    { value: 'llama-3.3-70b-versatile', label: 'Llama 3.3 70B (High Quality)' },
+    { value: 'llama-3.1-8b-instant', label: 'Llama 3.1 8B (Fast)' },
+    { value: 'mixtral-8x7b-32768', label: 'Mixtral 8x7B (Balanced)' },
+    { value: 'gemma2-9b-it', label: 'Gemma 2 9B (Google Open Model)' }
+  ],
   [AIProvider.GEMINI]: [
     { value: 'gemini-3.5-flash', label: 'Gemini 3.5 Flash (Fast & Default)' },
     { value: 'gemini-3.1-pro-preview', label: 'Gemini 3.1 Pro (Advanced Reasoning)' },

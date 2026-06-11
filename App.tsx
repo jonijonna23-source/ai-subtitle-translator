@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { 
   AIProvider, 
   SRTBlock, 
@@ -25,7 +25,8 @@ import {
   Info,
   Sun,
   Moon,
-  Monitor
+  Monitor,
+  Search
 } from 'lucide-react';
 
 const TARGET_LANGUAGES = [
@@ -196,7 +197,7 @@ const App: React.FC = () => {
     if (!modelValid) {
       setModel(PROVIDER_MODELS[provider]?.[0]?.value || '');
     }
-    if (provider === AIProvider.GROQ) {
+    if (provider === AIProvider.GROQ || provider === AIProvider.GROQ_FREE) {
       setDelay(2500);
       setBatchSize(5); 
     } else {
@@ -236,7 +237,8 @@ const App: React.FC = () => {
   };
 
   const startTranslation = async () => {
-    if (!apiKey) {
+    const isFreeProvider = provider === AIProvider.GEMINI_FREE || provider === AIProvider.GROQ_FREE;
+    if (!isFreeProvider && !apiKey) {
       setState(prev => ({ ...prev, error: 'Please enter an API Key to start translating.' }));
       return;
     }
@@ -357,7 +359,8 @@ const App: React.FC = () => {
   };
 
   const retrySingleBlock = async (blockId: string) => {
-    if (!apiKey) {
+    const isFreeProvider = provider === AIProvider.GEMINI_FREE || provider === AIProvider.GROQ_FREE;
+    if (!isFreeProvider && !apiKey) {
       setState(prev => ({ ...prev, error: 'Please enter an API Key to retry translating.' }));
       return;
     }
@@ -436,8 +439,10 @@ const App: React.FC = () => {
     setFile(null);
     setOriginalBlocks([]);
     setCustomInstructions('');
-    setBatchSize(provider === AIProvider.GROQ ? 5 : 10);
-    setDelay(provider === AIProvider.GROQ ? 2500 : 1500);
+    setSearchQuery('');
+    const isGroq = provider === AIProvider.GROQ || provider === AIProvider.GROQ_FREE;
+    setBatchSize(isGroq ? 5 : 10);
+    setDelay(isGroq ? 2500 : 1500);
     setRetryAlert(null);
     setIsExpanded(false);
     setIsCopied(false);
@@ -482,8 +487,24 @@ const App: React.FC = () => {
     setTimeout(() => setIsCopied(false), 2000);
   };
 
+  // State for filtering matrix table
+  const [searchQuery, setSearchQuery] = useState('');
+
   // Determine which blocks to display and layout constraints
   const displayBlocks = state.translatedBlocks.length > 0 ? state.translatedBlocks : originalBlocks;
+
+  // Filter blocks by search query
+  const filteredBlocks = useMemo(() => {
+    const query = searchQuery.trim().toLowerCase();
+    if (!query) return displayBlocks;
+
+    return displayBlocks.filter((block, idx) => {
+      const matchIndex = String(idx + 1) === query || (block.id && String(block.id).toLowerCase() === query);
+      const matchOriginal = (block.originalText || block.text || '').toLowerCase().includes(query);
+      const matchTranslation = (block.status === 'success' && block.text ? block.text : '').toLowerCase().includes(query);
+      return matchIndex || matchOriginal || matchTranslation;
+    });
+  }, [displayBlocks, searchQuery]);
 
   // Stats calculation
   const totalSubtitles = displayBlocks.length;
@@ -562,11 +583,13 @@ const App: React.FC = () => {
                   value={provider} 
                   onChange={(e) => setProvider(e.target.value as AIProvider)}
                   disabled={state.isProcessing}
-                  className="w-full px-4 py-2 border border-gray-200 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-blue-500 transition bg-white dark:bg-slate-800 text-slate-950 dark:text-slate-100 text-sm"
+                  className="w-full px-4 py-2 border border-gray-200 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-blue-500 transition bg-white dark:bg-slate-800 text-slate-950 dark:text-slate-100 text-sm font-semibold selection:bg-blue-100"
                 >
-                  <option value={AIProvider.GEMINI}>Google Gemini</option>
-                  <option value={AIProvider.OPENAI}>OpenAI</option>
-                  <option value={AIProvider.GROQ}>Groq AI</option>
+                  <option value={AIProvider.GEMINI_FREE}>Google Gemini (Free API Key)</option>
+                  <option value={AIProvider.GROQ_FREE}>Groq AI (Free API Key)</option>
+                  <option value={AIProvider.GEMINI}>Google Gemini (Custom Key)</option>
+                  <option value={AIProvider.OPENAI}>OpenAI (Custom Key)</option>
+                  <option value={AIProvider.GROQ}>Groq AI (Custom Key)</option>
                 </select>
               </div>
 
@@ -609,21 +632,33 @@ const App: React.FC = () => {
               <div>
                 <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1 flex items-center gap-1.5">
                   <Key className="w-4 h-4 text-slate-500" />
-                  {provider === AIProvider.GEMINI ? 'Gemini API Key' : provider === AIProvider.OPENAI ? 'OpenAI API Key' : 'Groq API Key'}
+                  {provider === AIProvider.GEMINI_FREE 
+                    ? 'Gemini API Key (Free)' 
+                    : provider === AIProvider.GROQ_FREE 
+                      ? 'Groq API Key (Free)' 
+                      : provider === AIProvider.GEMINI 
+                        ? 'Gemini API Key' 
+                        : provider === AIProvider.OPENAI 
+                          ? 'OpenAI API Key' 
+                          : 'Groq API Key'}
                 </label>
                 <input 
                   type="password" 
-                  value={apiKey} 
+                  value={provider === AIProvider.GEMINI_FREE || provider === AIProvider.GROQ_FREE ? "" : apiKey} 
                   onChange={(e) => setApiKey(e.target.value)}
-                  disabled={state.isProcessing}
+                  disabled={state.isProcessing || provider === AIProvider.GEMINI_FREE || provider === AIProvider.GROQ_FREE}
                   placeholder={
-                    provider === AIProvider.GEMINI 
-                      ? "Enter your Gemini API Key" 
-                      : provider === AIProvider.OPENAI 
-                        ? "Enter your OpenAI API Key (sk-...)" 
-                        : "Enter your Groq API Key (gsk_...)"
+                    provider === AIProvider.GEMINI_FREE
+                      ? "Free Gemini API Key Active (No input required)"
+                      : provider === AIProvider.GROQ_FREE
+                        ? "Free Groq API Key Active (No input required)"
+                        : provider === AIProvider.GEMINI 
+                          ? "Enter your Gemini API Key" 
+                          : provider === AIProvider.OPENAI 
+                            ? "Enter your OpenAI API Key (sk-...)" 
+                            : "Enter your Groq API Key (gsk_...)"
                   }
-                  className="w-full px-4 py-2 border border-gray-200 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-blue-500 transition bg-white dark:bg-slate-800 text-slate-950 dark:text-slate-100 text-sm font-mono"
+                  className="w-full px-4 py-2 border border-gray-200 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-blue-500 transition bg-white dark:bg-slate-800 text-slate-950 dark:text-slate-100 text-sm font-mono disabled:opacity-60 disabled:cursor-not-allowed"
                 />
                 <div className="mt-2.5 flex items-center gap-2">
                   <input
@@ -858,17 +893,38 @@ const App: React.FC = () => {
           {/* SUBTITLE BENTO LAYOUT METRICS AND SPREADSHEET TABLE */}
           {displayBlocks.length > 0 && (
             <div className="mt-8">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-bold text-slate-800 dark:text-slate-200 flex items-center gap-2">
-                  <Info className="w-4 h-4 text-blue-500" />
-                  Subtitle Translation Matrix
-                </h3>
-                <div className="text-xs text-slate-500 dark:text-slate-400 font-semibold flex items-center gap-1">
-                  Scroll or expand to inspect blocks index
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+                <div>
+                  <h3 className="text-lg font-bold text-slate-800 dark:text-slate-200 flex items-center gap-2">
+                    <Info className="w-4 h-4 text-blue-500" />
+                    Subtitle Translation Matrix
+                  </h3>
+                </div>
+                
+                {/* Search Bar */}
+                <div className="relative w-full sm:w-80">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <Search className="h-4 w-4 text-slate-400 dark:text-slate-500" />
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="Search by keyword or index..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full pl-9 pr-12 py-2 border border-slate-200 dark:border-slate-800 rounded-xl bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-500/50 shadow-sm transition-all"
+                  />
+                  {searchQuery && (
+                    <button
+                      onClick={() => setSearchQuery('')}
+                      className="absolute inset-y-0 right-0 pr-3 flex items-center text-[10px] font-bold text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+                    >
+                      CLEAR
+                    </button>
+                  )}
                 </div>
               </div>
 
-              {/* SpreadSheet table mimicking the dark navy style of user screenshot */}
+               {/* SpreadSheet table mimicking the dark navy style of user screenshot */}
               <div className="bg-[#0f172a] rounded-xl overflow-hidden border border-slate-700 shadow-2xl">
                 <div className={`overflow-x-auto overflow-y-auto transition-all duration-300 ${isExpanded ? 'max-h-[680px]' : 'max-h-[380px]'}`}>
                   <table className="w-full text-left border-collapse table-fixed select-none">
@@ -883,153 +939,161 @@ const App: React.FC = () => {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-800/80">
-                      {displayBlocks.map((block, idx) => {
-                        const isRetrying = retryingIds.has(block.id);
-                        
-                        // Break down timestamp
-                        let startTime = '';
-                        let endTime = '';
-                        if (block.timeRange) {
-                          const parts = block.timeRange.split('-->');
-                          if (parts.length >= 2) {
-                            startTime = parts[0].trim();
-                            endTime = parts[1].trim();
-                          } else {
-                            const commaParts = block.timeRange.split(',');
-                            if (commaParts.length >= 2) {
-                              startTime = commaParts[0].trim();
-                              endTime = commaParts[1].trim();
+                      {filteredBlocks.length === 0 ? (
+                        <tr>
+                          <td colSpan={6} className="py-12 text-center text-slate-500 text-sm font-medium">
+                            No matching subtitle blocks found. Try searching for another keyword or index.
+                          </td>
+                        </tr>
+                      ) : (
+                        filteredBlocks.map((block) => {
+                          const isRetrying = retryingIds.has(block.id);
+                          const originalIdx = displayBlocks.indexOf(block);
+                          
+                          // Break down timestamp
+                          let startTime = '';
+                          let endTime = '';
+                          if (block.timeRange) {
+                            const parts = block.timeRange.split('-->');
+                            if (parts.length >= 2) {
+                              startTime = parts[0].trim();
+                              endTime = parts[1].trim();
                             } else {
-                              startTime = block.timeRange;
+                              const commaParts = block.timeRange.split(',');
+                              if (commaParts.length >= 2) {
+                                startTime = commaParts[0].trim();
+                                endTime = commaParts[1].trim();
+                              } else {
+                                startTime = block.timeRange;
+                              }
                             }
                           }
-                        }
 
-                        return (
-                          <tr key={block.id || idx} className="hover:bg-slate-900/60 transition duration-150 group">
-                            {/* ID */}
-                            <td className="py-3.5 px-4 font-semibold text-slate-200 text-sm border-r border-slate-800/40">
-                              <div className="flex items-center gap-1">
-                                <span>{idx + 1}</span>
-                                {block.id && block.id !== String(idx + 1) && (
-                                  <span className="text-[10px] text-slate-500 font-mono" title={`Original ID: ${block.id}`}>
-                                    [{block.id}]
+                          return (
+                            <tr key={block.id || originalIdx} className="hover:bg-slate-900/60 transition duration-150 group">
+                              {/* ID */}
+                              <td className="py-3.5 px-4 font-semibold text-slate-200 text-sm border-r border-slate-800/40">
+                                <div className="flex items-center gap-1">
+                                  <span>{originalIdx + 1}</span>
+                                  {block.id && block.id !== String(originalIdx + 1) && (
+                                    <span className="text-[10px] text-slate-500 font-mono" title={`Original ID: ${block.id}`}>
+                                      [{block.id}]
+                                    </span>
+                                  )}
+                                </div>
+                              </td>
+
+                              {/* TIME */}
+                              <td className="py-3.5 px-4 border-r border-slate-800/40 text-center">
+                                <div className="text-[11px] text-slate-300 font-mono tracking-tight leading-relaxed">
+                                  {startTime}
+                                  {endTime && (
+                                    <>
+                                      <div className="text-slate-500 text-[10px] my-0.5">↓</div>
+                                      {endTime}
+                                    </>
+                                  )}
+                                </div>
+                              </td>
+
+                              {/* ORIGINAL TEXT */}
+                              <td className="py-3.5 px-4 border-r border-slate-800/40 align-top">
+                                <div className="text-slate-100 text-sm font-sans leading-relaxed whitespace-pre-wrap select-text">
+                                  {block.originalText || block.text}
+                                </div>
+                              </td>
+
+                              {/* TRANSLATION */}
+                              <td className="py-3.5 px-4 border-r border-slate-800/40 align-top">
+                                {block.status === 'error' ? (
+                                  <div className="bg-[#2a1215]/80 border border-red-900/80 rounded-lg p-3 text-red-300 space-y-1 text-[11px]">
+                                    <div className="flex items-center gap-1.5 font-bold text-red-400">
+                                      <AlertTriangle className="w-3.5 h-3.5" />
+                                      Translation Error
+                                    </div>
+                                    <div className="font-mono opacity-90 break-words leading-relaxed select-text">
+                                      {block.error || 'The model encountered an issue rendering this block.'}
+                                    </div>
+                                  </div>
+                                ) : block.status === 'translating' ? (
+                                  <div className="flex items-center gap-2 text-sky-400 py-1 text-xs">
+                                    <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                                    <span>Translating...</span>
+                                  </div>
+                                ) : block.status === 'success' && block.text ? (
+                                  <div className="text-blue-100 text-sm font-sans leading-relaxed whitespace-pre-wrap select-text">
+                                    {block.text}
+                                  </div>
+                                ) : (
+                                  <span className="text-slate-500 text-xs italic">Awaiting translation run...</span>
+                                )}
+                              </td>
+
+                              {/* STATUS */}
+                              <td className="py-3.5 px-4 text-center border-r border-slate-800/40">
+                                {block.status === 'success' ? (
+                                  <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/20 uppercase tracking-widest">
+                                    Success
+                                  </span>
+                                ) : block.status === 'error' ? (
+                                  <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-500/15 text-rose-400 border border-rose-500/20 uppercase tracking-widest">
+                                    Error
+                                  </span>
+                                ) : block.status === 'translating' ? (
+                                  <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-sky-500/15 text-sky-400 border border-sky-500/20 uppercase tracking-widest animate-pulse">
+                                    Translting
+                                  </span>
+                                ) : (
+                                  <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-800 text-slate-400 border border-slate-700 uppercase tracking-widest">
+                                    Pending
                                   </span>
                                 )}
-                              </div>
-                            </td>
+                              </td>
 
-                            {/* TIME */}
-                            <td className="py-3.5 px-4 border-r border-slate-800/40 text-center">
-                              <div className="text-[11px] text-slate-300 font-mono tracking-tight leading-relaxed">
-                                {startTime}
-                                {endTime && (
-                                  <>
-                                    <div className="text-slate-500 text-[10px] my-0.5">↓</div>
-                                    {endTime}
-                                  </>
-                                )}
-                              </div>
-                            </td>
-
-                            {/* ORIGINAL TEXT */}
-                            <td className="py-3.5 px-4 border-r border-slate-800/40 align-top">
-                              <div className="text-slate-100 text-sm font-sans leading-relaxed whitespace-pre-wrap select-text">
-                                {block.originalText || block.text}
-                              </div>
-                            </td>
-
-                            {/* TRANSLATION */}
-                            <td className="py-3.5 px-4 border-r border-slate-800/40 align-top">
-                              {block.status === 'error' ? (
-                                <div className="bg-[#2a1215]/80 border border-red-900/80 rounded-lg p-3 text-red-300 space-y-1 text-[11px]">
-                                  <div className="flex items-center gap-1.5 font-bold text-red-400">
-                                    <AlertTriangle className="w-3.5 h-3.5" />
-                                    Translation Error
-                                  </div>
-                                  <div className="font-mono opacity-90 break-words leading-relaxed select-text">
-                                    {block.error || 'The model encountered an issue rendering this block.'}
-                                  </div>
-                                </div>
-                              ) : block.status === 'translating' ? (
-                                <div className="flex items-center gap-2 text-sky-400 py-1 text-xs">
-                                  <RefreshCw className="w-3.5 h-3.5 animate-spin" />
-                                  <span>Translating...</span>
-                                </div>
-                              ) : block.status === 'success' && block.text ? (
-                                <div className="text-blue-100 text-sm font-sans leading-relaxed whitespace-pre-wrap select-text">
-                                  {block.text}
-                                </div>
-                              ) : (
-                                <span className="text-slate-500 text-xs italic">Awaiting translation run...</span>
-                              )}
-                            </td>
-
-                            {/* STATUS */}
-                            <td className="py-3.5 px-4 text-center border-r border-slate-800/40">
-                              {block.status === 'success' ? (
-                                <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/20 uppercase tracking-widest">
-                                  Success
-                                </span>
-                              ) : block.status === 'error' ? (
-                                <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-500/15 text-rose-400 border border-rose-500/20 uppercase tracking-widest">
-                                  Error
-                                </span>
-                              ) : block.status === 'translating' ? (
-                                <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-sky-500/15 text-sky-400 border border-sky-500/20 uppercase tracking-widest animate-pulse">
-                                  Translting
-                                </span>
-                              ) : (
-                                <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-800 text-slate-400 border border-slate-700 uppercase tracking-widest">
-                                  Pending
-                                </span>
-                              )}
-                            </td>
-
-                            {/* ACTION (Single Retry) */}
-                            <td className="py-3.5 px-4 text-center">
-                              <button
-                                onClick={() => retrySingleBlock(block.id)}
-                                disabled={state.isProcessing || isRetrying}
-                                className="p-1.5 rounded-md text-slate-400 hover:text-white hover:bg-slate-800/80 transition duration-150 disabled:opacity-20 disabled:hover:bg-transparent"
-                                title="Retry translation for this block only"
-                              >
-                                <RefreshCw className={`w-4 h-4 ${isRetrying ? 'animate-spin' : ''}`} />
-                              </button>
-                            </td>
-                          </tr>
-                        );
-                      })}
+                              {/* ACTION (Single Retry) */}
+                              <td className="py-3.5 px-4 text-center">
+                                <button
+                                  onClick={() => retrySingleBlock(block.id)}
+                                  disabled={state.isProcessing || isRetrying}
+                                  className="p-1.5 rounded-md text-slate-400 hover:text-white hover:bg-slate-800/80 transition duration-150 disabled:opacity-20 disabled:hover:bg-transparent"
+                                  title="Retry translation for this block only"
+                                >
+                                  <RefreshCw className={`w-4 h-4 ${isRetrying ? 'animate-spin' : ''}`} />
+                                </button>
+                              </td>
+                            </tr>
+                          );
+                        })
+                      )}
                     </tbody>
                   </table>
-                </div>
+                </div>                 {/* Spreadsheet Footer Mimicking the Screenshot */}
+                <div className="bg-[#0b1329] border-t border-slate-800 px-4 py-4 grid grid-cols-1 sm:grid-cols-3 items-center gap-4 text-xs font-semibold text-slate-300">
+                  {/* Left Column Spacer for Perfect Centering */}
+                  <div className="hidden sm:block"></div>
 
-                {/* Spreadsheet Footer Mimicking the Screenshot */}
-                <div className="bg-[#0b1329] border-t border-slate-800 px-4 py-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-semibold text-slate-300">
-                  <div>
-                    Showing <span className="text-white font-bold">{totalSubtitles}</span> subtitles (scrollable • {isExpanded ? '12-row default view' : '6-row default view'})
-                  </div>
-                  
-                  <div>
+                  {/* Center Column: Expand/Collapse Button */}
+                  <div className="flex justify-center">
                     <button
                       onClick={() => setIsExpanded(!isExpanded)}
                       className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-lg bg-slate-800 text-slate-200 hover:bg-slate-700 transition"
                     >
                       {isExpanded ? (
                         <>
-                          <ChevronUp className="w-4 h-4" />
+                          <ChevronUp className="w-4 h-4 text-slate-400" />
                           Collapse table
                         </>
                       ) : (
                         <>
-                          <ChevronDown className="w-4 h-4" />
+                          <ChevronDown className="w-4 h-4 text-slate-400" />
                           Expand table
                         </>
                       )}
                     </button>
                   </div>
 
-                  <div className="flex items-center gap-3">
+                  {/* Right Column: Status Statistics */}
+                  <div className="flex items-center justify-center sm:justify-end gap-3 text-right">
                     <span className="text-emerald-400">
                       {translatedCount} translated
                     </span>

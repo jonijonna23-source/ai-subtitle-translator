@@ -10,6 +10,23 @@ async function translateBlocksAttempt(
   blocks: SRTBlock[],
   customInstructions?: string
 ): Promise<SRTBlock[]> {
+  let actualProvider = provider;
+  let actualApiKey = apiKey;
+
+  if (provider === AIProvider.GEMINI_FREE) {
+    actualProvider = AIProvider.GEMINI;
+    actualApiKey = (import.meta.env.VITE_FREE_GEMINI_KEY || '').trim();
+    if (!actualApiKey) {
+      throw new Error("API Key Gemini Gratis belum dikonfigurasi di file environment .env (VITE_FREE_GEMINI_KEY). Harap dikonfigurasi oleh pemilik server atau silakan gunakan model Google Gemini (Custom Key) dengan mengisi API Key Anda sendiri.");
+    }
+  } else if (provider === AIProvider.GROQ_FREE) {
+    actualProvider = AIProvider.GROQ;
+    actualApiKey = (import.meta.env.VITE_FREE_GROQ_KEY || '').trim();
+    if (!actualApiKey) {
+      throw new Error("API Key Groq Gratis belum dikonfigurasi di file environment .env (VITE_FREE_GROQ_KEY). Harap dikonfigurasi oleh pemilik server atau silakan gunakan model Groq AI (Custom Key) dengan mengisi API Key Anda sendiri.");
+    }
+  }
+
   const prompt = `Translate the following subtitle text to ${targetLanguage}. 
 Keep the exact same number of lines. Each line corresponds to a separate subtitle block.
 Do not include IDs or timestamps in your response, just the translated text line by line.
@@ -17,8 +34,8 @@ Do not include IDs or timestamps in your response, just the translated text line
 Text to translate:
 ${blocks.map(b => b.text.replace(/\n/g, ' ')).join('\n')}`;
 
-  if (provider === AIProvider.GEMINI) {
-    const ai = new GoogleGenAI({ apiKey });
+  if (actualProvider === AIProvider.GEMINI) {
+    const ai = new GoogleGenAI({ apiKey: actualApiKey });
     const systemInstruction = "You are a professional subtitle translator. You translate text accurately while maintaining the context. Return one translated line for each input line." +
       (customInstructions ? ` Additional custom rules of translation styling, tone and guidelines: ${customInstructions}` : "");
 
@@ -43,7 +60,7 @@ ${blocks.map(b => b.text.replace(/\n/g, ' ')).join('\n')}`;
         error: translatedVal ? null : 'Failed to retrieve translated line'
       };
     });
-  } else if (provider === AIProvider.OPENAI) {
+  } else if (actualProvider === AIProvider.OPENAI) {
     // OpenAI Translation
     const systemContent = `You are a professional translator translating subtitles to ${targetLanguage}. Keep the output line-for-line equivalent to the input.` +
       (customInstructions ? ` Additional custom rules of translation styling, tone and guidelines: ${customInstructions}` : "");
@@ -52,7 +69,7 @@ ${blocks.map(b => b.text.replace(/\n/g, ' ')).join('\n')}`;
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`
+        'Authorization': `Bearer ${actualApiKey}`
       },
       body: JSON.stringify({
         model: model,
@@ -91,7 +108,7 @@ ${blocks.map(b => b.text.replace(/\n/g, ' ')).join('\n')}`;
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`
+        'Authorization': `Bearer ${actualApiKey}`
       },
       body: JSON.stringify({
         model: model,
