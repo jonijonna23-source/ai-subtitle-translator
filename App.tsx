@@ -21,6 +21,7 @@ import {
   Download, 
   AlertTriangle,
   RotateCcw,
+  Play,
   Sparkles,
   Info,
   Sun,
@@ -176,6 +177,10 @@ const App: React.FC = () => {
   const [isCopied, setIsCopied] = useState<boolean>(false);
   const [retryingIds, setRetryingIds] = useState<Set<string>>(new Set());
 
+  const canResume = useMemo(() => {
+    return !state.isProcessing && state.currentIndex > 0 && state.currentIndex < originalBlocks.length;
+  }, [state.isProcessing, state.currentIndex, originalBlocks.length]);
+
   // Save credentials and configs to localStorage when checked or clear them
   useEffect(() => {
     localStorage.setItem('save_credentials', String(saveCredentials));
@@ -236,7 +241,7 @@ const App: React.FC = () => {
     }
   };
 
-  const startTranslation = async () => {
+  const startTranslation = async (resume: boolean = false) => {
     const isFreeProvider = provider === AIProvider.GEMINI_FREE || provider === AIProvider.GROQ_FREE;
     if (!isFreeProvider && !apiKey) {
       setState(prev => ({ ...prev, error: 'Please enter an API Key to start translating.' }));
@@ -250,9 +255,9 @@ const App: React.FC = () => {
     stopRef.current = false;
     setRetryAlert(null);
     
-    // Initialize full size list if empty or reset
+    // Initialize full size list if empty or reset, or starting a new run from scratch
     let currentTranslatedList = [...state.translatedBlocks];
-    if (currentTranslatedList.length !== originalBlocks.length) {
+    if (!resume || currentTranslatedList.length !== originalBlocks.length) {
       currentTranslatedList = originalBlocks.map(b => ({
         ...b,
         text: '',
@@ -261,19 +266,21 @@ const App: React.FC = () => {
       }));
     }
 
+    const startIdx = resume ? state.currentIndex : 0;
+
     setState(prev => ({ 
       ...prev, 
       isProcessing: true, 
       error: null, 
-      currentIndex: 0, 
+      currentIndex: startIdx, 
       translatedBlocks: currentTranslatedList,
-      progress: 0 
+      progress: resume ? prev.progress : 0 
     }));
 
     const total = originalBlocks.length;
 
     try {
-      for (let i = 0; i < total; i += batchSize) {
+      for (let i = startIdx; i < total; i += batchSize) {
         if (stopRef.current) break;
 
         setRetryAlert(null);
@@ -770,12 +777,31 @@ const App: React.FC = () => {
           {/* Action Control Buttons */}
           <div className="flex flex-wrap gap-4 mb-8">
             {!state.isProcessing ? (
-              <button 
-                onClick={startTranslation}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-xl font-bold transition flex-1 shadow-lg shadow-blue-50/50 dark:shadow-none"
-              >
-                Start Translation
-              </button>
+              canResume ? (
+                <>
+                  <button 
+                    onClick={() => startTranslation(true)}
+                    className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-3 rounded-xl font-bold transition flex-[2] shadow-lg shadow-emerald-50/10 dark:shadow-none flex items-center justify-center gap-2"
+                  >
+                    <Play className="w-5 h-5 fill-current" />
+                    Resume Translation
+                  </button>
+                  <button 
+                    onClick={() => startTranslation(false)}
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-bold transition flex-1 shadow-lg shadow-blue-50/50 dark:shadow-none flex items-center justify-center gap-2"
+                  >
+                    <RotateCcw className="w-4 h-4" />
+                    Start Over
+                  </button>
+                </>
+              ) : (
+                <button 
+                  onClick={() => startTranslation(false)}
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-xl font-bold transition flex-1 shadow-lg shadow-blue-50/50 dark:shadow-none"
+                >
+                  Start Translation
+                </button>
+              )
             ) : (
               <button 
                 onClick={stopTranslation}
