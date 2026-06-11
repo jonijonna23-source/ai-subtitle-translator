@@ -410,6 +410,17 @@ const App: React.FC = () => {
   const handleContactSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!contactMessage.trim()) return;
+
+    const recipient = 'alrosyid24@gmail.com';
+    const emailSubject = uiLang === 'en' 
+      ? `AI Subtitle Translator Feedback - ${contactName || 'Anonymous'}` 
+      : `Masukan AI Subtitle Translator - ${contactName || 'Tanpa Nama'}`;
+    const emailBody = uiLang === 'en'
+      ? `Name: ${contactName || 'Anonymous'}\n\nMessage:\n${contactMessage}`
+      : `Nama: ${contactName || 'Tanpa Nama'}\n\nPesan:\n${contactMessage}`;
+
+    window.location.href = `mailto:${recipient}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+
     setContactSubmitted(true);
     setTimeout(() => {
       setContactName('');
