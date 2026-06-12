@@ -1758,7 +1758,7 @@ const App: React.FC = () => {
                     className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                   />
                   <div className="text-center">
-                    <span className="text-sm text-slate-600 dark:text-slate-300 font-medium block">
+                    <span className="text-sm text-slate-600 dark:text-slate-300 font-medium block truncate max-w-[250px] sm:max-w-full mx-auto px-2">
                       {file ? file.name : t.uploadPlaceholder}
                     </span>
                     <span className="text-xs text-slate-400 dark:text-slate-500 mt-1 block">{t.uploadDragDrop}</span>
@@ -1904,7 +1904,7 @@ const App: React.FC = () => {
 
           {/* Progress Indicator */}
           {(state.isProcessing || state.progress > 0) && (
-            <div className="mb-6 p-4 bg-blue-50/60 dark:bg-blue-955/20 border border-blue-100 dark:border-blue-900/40 rounded-xl transition duration-250">
+            <div className="mb-6 p-4 bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 shadow-sm rounded-xl transition duration-250">
               <div className="flex justify-between items-center mb-2">
                 <span className="text-sm font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
                   {state.progress === 100 ? (
@@ -1929,7 +1929,7 @@ const App: React.FC = () => {
                   style={{ width: `${state.progress}%` }}
                 ></div>
               </div>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-2 font-semibold">
+              <p className="text-xs text-slate-700 dark:text-slate-200 mt-2 font-semibold">
                 {state.progress === 100 
                   ? (uiLang === 'en' ? `Done translating ${state.totalBlocks} subtitle blocks!` : `Selesai menerjemahkan ${state.totalBlocks} segmen/blok!`)
                   : (uiLang === 'en' ? `Processing ${state.currentIndex} of ${state.totalBlocks} subtitle blocks...` : `Memproses ${state.currentIndex} dari ${state.totalBlocks} segmen/blok...`)
@@ -2053,7 +2053,7 @@ const App: React.FC = () => {
                {/* SpreadSheet table mimicking the dark navy style of user screenshot */}
               <div className="bg-[#0f172a] rounded-xl overflow-hidden border border-slate-700 shadow-2xl">
                 <div className={`overflow-x-auto overflow-y-auto transition-all duration-300 ${isExpanded ? 'max-h-[680px]' : 'max-h-[380px]'}`}>
-                  <table className="w-full text-left border-collapse table-fixed select-none">
+                  <table className="w-full min-w-[800px] text-left border-collapse table-fixed select-none">
                     <thead>
                       <tr className="bg-[#0b1329] text-[11px] font-bold tracking-wider text-slate-400 uppercase border-b border-slate-800">
                         <th className="w-16 py-3 px-4">ID</th>
