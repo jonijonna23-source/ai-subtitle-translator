@@ -101,7 +101,7 @@ const getInstructionToUse = (customText: string): string => {
 const LOCALES = {
   en: {
     appName: 'AI Subtitle Translator',
-    appDesc: 'Fast and accurate AI subtitle & text translator.',
+    appDesc: 'Fast, Accurate, Online and Free AI subtitle & text translator.',
     userGuideBtn: 'User Guide',
     donateBtn: 'Buy Me a Coffee',
     contactBtn: 'Contact',
