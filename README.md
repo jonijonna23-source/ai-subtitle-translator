@@ -1,5 +1,9 @@
 <div align="center">
-  <img src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/globe.svg" width="80" height="80" />
+  <a href="https://aisubtitletranslator.vercel.app/">
+    <img src="https://raw.githubusercontent.com/jonijonna23-source/ai-subtitle-translator/ec6e0b702f1ccb69115d6b449362dba0ef342506/cc_16913599.png" width="80" height="80" />
+  </a>
+  <a href="https://aisubtitletranslator.vercel.app/" target="_blank">Kunjungi AI Subtitle Translator</a>
+  
   <h1>🎬 AI Subtitles Translator</h1>
   <p><b>A professional subtitle translation tool with Batch Processing & Smart Retry</b></p>
 
@@ -48,7 +52,7 @@
     </td>
     <td width="50%">
       <h4>📋 Quick Export</h4>
-      One-click buttons to download the final .srt file or copy the text to your clipboard.
+      One-click buttons to download the final subtitle file or copy the text to your clipboard.
     </td>
   </tr>
 </table>
@@ -77,7 +81,7 @@ To run this application on your local machine, follow these steps:
 
 4.  **Usage**
     * Open your browser at `http://localhost:5173`.
-    * Enter your **Gemini API Key** in the input field.
+    * Enter your **API Key** in the input field.
     * Upload your `.srt` file and select the target language.
     * Click **"Mulai Terjemahkan"** (Start Translation).
 
