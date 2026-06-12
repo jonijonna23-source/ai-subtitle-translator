@@ -1,25 +1,25 @@
 <div align="center">
   <a href="https://aisubtitletranslator.vercel.app/" target="_blank">
-    <img src="https://raw.githubusercontent.com/jonijonna23-source/ai-subtitle-translator/ec6e0b702f1ccb69115d6b449362dba0ef342506/cc_16913599.png" width="80" height="80" alt="Logo AI Subtitles Translator" />
+    <img src="https://raw.githubusercontent.com/jonijonna23-source/ai-subtitle-translator/ec6e0b702f1ccb69115d6b449362dba0ef342506/cc_16913599.png" width="80" height="80" alt="AI Subtitles Translator Logo" />
   </a>
   
   <h1>
-    <a href="https://aisubtitletranslator.vercel.app/" target="_blank" style="text-decoration: none;">🎬 AI Subtitles Translator</a>
+    <a href="https://aisubtitletranslator.vercel.app/" target="_blank" style="text-decoration: none; color: inherit;">🎬 AI Subtitles Translator</a>
   </h1>
-  <p><b>A professional subtitle translation tool with Batch Processing & Smart Retry</b></p>
+  <p><b>A professional subtitle translation tool featuring Batch Processing & Smart Retry</b></p>
 
   <p>
-    <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" />
-    <img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" />
-    <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" />
-    <img src="https://img.shields.io/badge/Google%20Gemini-4285F4?style=for-the-badge&logo=google&logoColor=white" />
+    <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React" />
+    <img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
+    <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS" />
+    <img src="https://img.shields.io/badge/AI_Models-4285F4?style=for-the-badge&logo=google&logoColor=white" alt="Gemini/OpenAI/Groq" />
   </p>
 </div>
 
 <hr />
 
 ### 🚀 Overview
-**AI Subtitles Translator** is a specialized web application built to translate `multiple formats` subtitle files. It uses **Google Gemini/Open AI/Groq** AI model to deliver natural, conversational translations while managing API rate limits through an automated batching system.
+**AI Subtitles Translator** is a specialized web application built to seamlessly translate subtitle files across various formats. Powered by leading AI models (**Google Gemini, OpenAI, and Groq**), it delivers natural, context-aware translations while intelligently managing API rate limits through an automated batching architecture.
 
 ---
 
@@ -29,31 +29,31 @@
   <tr>
     <td width="50%">
       <h4>📦 Automated Batching</h4>
-      Automatically splits subtitles into groups of 15 lines to stay within AI context windows.
+      Intelligently splits subtitles into optimized chunks (e.g., 15 lines) to maintain context and respect AI token limits.
     </td>
     <td width="50%">
-      <h4>🔄 Infinite Retry System</h4>
-      Automatically waits for 15 seconds and retries if the API is busy (Error 429).
-    </td>
-  </tr>
-  <tr>
-    <td width="50%">
-      <h4>📊 Live Progress Tracking</h4>
-      Displays real-time percentage, batch count, and a live preview of translated text.
-    </td>
-    <td width="50%">
-      <h4>⏹️ Process Control</h4>
-      Includes a "Stop" button to halt the process while keeping all successfully translated data.
+      <h4>🛡️ Resilient API Handling</h4>
+      Built-in smart retry mechanism that automatically pauses and re-attempts connections during API rate limits (Error 429).
     </td>
   </tr>
   <tr>
     <td width="50%">
-      <h4>💾 Local Persistence</h4>
-      Saves your API Key securely in <code>localStorage</code> so you don't have to re-enter it.
+      <h4>📊 Real-time Monitoring</h4>
+      Track translation progress with a live percentage indicator, batch counter, and instant text previews.
     </td>
     <td width="50%">
-      <h4>📋 Quick Export</h4>
-      One-click buttons to download the final subtitle file or copy the text to your clipboard.
+      <h4>⏹️ Granular Process Control</h4>
+      Safely halt ongoing translations with a "Stop" function that preserves all successfully processed data.
+    </td>
+  </tr>
+  <tr>
+    <td width="50%">
+      <h4>💾 Secure Local Storage</h4>
+      Your API keys are stored securely in your browser's <code>localStorage</code>, eliminating the need for repeated manual entry.
+    </td>
+    <td width="50%">
+      <h4>📋 Frictionless Export</h4>
+      Instantly copy translated text to your clipboard or download the final synchronized subtitle file with a single click.
     </td>
   </tr>
 </table>
@@ -64,37 +64,36 @@
 
 To run this application on your local machine, follow these steps:
 
-1.  **Clone or Download the Project**
+1.  **Clone the Repository**
     ```bash
+    git clone <your-repository-url>
     cd <your-project-folder>
     ```
 
 2.  **Install Dependencies**
+    *(Make sure you have Node.js installed)*
     ```bash
     npm install
-    npm install lucide-react
     ```
 
-3.  **Launch the Application**
+3.  **Launch the Development Server**
     ```bash
     npm run dev
     ```
 
 4.  **Usage**
-    * Open your browser at `http://localhost:5173`.
-    * Enter your **API Key** in the input field.
-    * Upload your `.srt` file and select the target language.
-    * Click **"Mulai Terjemahkan"** (Start Translation).
+    * Open your browser and navigate to `http://localhost:5173`.
+    * Enter your preferred **API Key** (Gemini, OpenAI, or Groq) in the settings.
+    * Upload your subtitle file (e.g., `.srt`).
+    * Select your target language and click **"Mulai Terjemahkan"** (Start Translation).
 
 ---
 
 ### 🛠️ Technical Reference
 
-| Component | Description |
+| Component | Architecture Details |
 | :--- | :--- |
-| **Translation Engine** | Uses a custom "Professional Movie Translator" prompt for informal/natural results. |
-| **State Management** | Uses `useState` and `useRef` to handle real-time UI updates and process status. |
-| **Reliability** | Implements a `while(!success)` loop to ensure no batch is skipped during API congestion. |
-| **SRT Service** | Custom logic to parse and reconstruct SRT files without breaking timecode sync. |
-
----
+| **Translation Engine** | Utilizes custom prompt engineering ("Professional Movie Translator") to ensure culturally relevant and informal/natural dialogues. |
+| **State Management** | Leverages React's `useState` and `useRef` for optimal real-time UI updates without unnecessary re-renders. |
+| **Reliability Loop** | Implements asynchronous `while(!success)` loops, ensuring zero data loss or skipped lines during API congestion. |
+| **Subtitle Parser** | Custom parsing logic to safely extract, translate, and reconstruct subtitle files while strictly preserving timecode synchronization. |
