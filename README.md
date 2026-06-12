@@ -1,10 +1,10 @@
 <div align="center">
-  <a href="https://aisubtitletranslator.vercel.app/">
+  <a href="https://aisubtitletranslator.vercel.app/" target="_blank">
     <img src="https://raw.githubusercontent.com/jonijonna23-source/ai-subtitle-translator/ec6e0b702f1ccb69115d6b449362dba0ef342506/cc_16913599.png" width="80" height="80 alt="Logo AI Subtitles Translator" />
   </a>
   
   <h1>
-    <a href="https://aisubtitletranslator.vercel.app/" style="text-decoration: none;">🎬 AI Subtitles Translator</a>
+    <a href="https://aisubtitletranslator.vercel.app/" target="_blank" style="text-decoration: none;">🎬 AI Subtitles Translator</a>
   </h1>
   <p><b>A professional subtitle translation tool with Batch Processing & Smart Retry</b></p>
 
