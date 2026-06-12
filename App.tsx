@@ -431,6 +431,150 @@ const App: React.FC = () => {
 
   const t = LOCALES[uiLang];
 
+  const renderLanguageDropdown = () => {
+    return (
+      <div className="relative text-left" ref={langRef}>
+        <button
+          id="lang-dropdown-trigger"
+          type="button"
+          onClick={() => setIsLangDropdownOpen(!isLangDropdownOpen)}
+          className="px-4 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800 border border-gray-200/50 dark:border-slate-800 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 text-slate-700 dark:text-slate-300 shadow-sm"
+        >
+          <Languages className="w-3.5 h-3.5 text-blue-500" />
+          <span>{uiLang === 'en' ? 'English' : 'Indonesia'}</span>
+          <ChevronDown className={`w-3 h-3 transition-transform duration-205 ${isLangDropdownOpen ? 'rotate-180' : ''}`} />
+        </button>
+        
+        {isLangDropdownOpen && (
+          <div className="absolute right-0 mt-2 w-40 rounded-xl bg-white dark:bg-slate-900 border border-gray-100 dark:border-slate-800 shadow-xl overflow-hidden z-50 animate-fade-in divide-y divide-gray-100 dark:divide-slate-800/40">
+            <div className="px-3 py-1.5 bg-slate-50 dark:bg-slate-900/40 text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest leading-none">
+              {t.languageLabel}
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                setUiLang('en');
+                localStorage.setItem('ui_lang', 'en');
+                setIsLangDropdownOpen(false);
+              }}
+              className={`w-full px-4 py-2.5 text-left text-xs font-medium transition flex items-center justify-between ${
+                uiLang === 'en'
+                  ? 'bg-blue-50/50 text-blue-600 dark:bg-blue-950/20 dark:text-blue-400 font-bold'
+                  : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
+              }`}
+            >
+              <span>English</span>
+              {uiLang === 'en' && <Check className="w-3.5 h-3.5 text-blue-500" />}
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setUiLang('id');
+                localStorage.setItem('ui_lang', 'id');
+                setIsLangDropdownOpen(false);
+              }}
+              className={`w-full px-4 py-2.5 text-left text-xs font-medium transition flex items-center justify-between ${
+                uiLang === 'id'
+                  ? 'bg-blue-50/50 text-blue-600 dark:bg-blue-950/20 dark:text-blue-400 font-bold'
+                  : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
+              }`}
+            >
+              <span>Indonesia</span>
+              {uiLang === 'id' && <Check className="w-3.5 h-3.5 text-blue-500" />}
+            </button>
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  const renderThemeDropdown = (align: 'left' | 'right' = 'right') => {
+    return (
+      <div className="relative text-left" ref={themeRef}>
+        <button
+          id="theme-dropdown-trigger"
+          type="button"
+          onClick={() => setIsThemeDropdownOpen(!isThemeDropdownOpen)}
+          className="px-4 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800 border border-gray-200/50 dark:border-slate-800 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 text-slate-700 dark:text-slate-300 shadow-sm"
+        >
+          {theme === 'light' ? (
+            <Sun className="w-3.5 h-3.5 text-amber-500" />
+          ) : theme === 'dark' ? (
+            <Moon className="w-3.5 h-3.5 text-indigo-400" />
+          ) : (
+            <Monitor className="w-3.5 h-3.5 text-slate-500" />
+          )}
+          <span className="capitalize text-xs">
+            {theme === 'light' ? (uiLang === 'en' ? 'Light' : 'Terang') : theme === 'dark' ? (uiLang === 'en' ? 'Dark' : 'Gelap') : (uiLang === 'en' ? 'System' : 'Sistem')}
+          </span>
+          <ChevronDown className={`w-3 h-3 transition-transform duration-205 ${isThemeDropdownOpen ? 'rotate-180' : ''}`} />
+        </button>
+        
+        {isThemeDropdownOpen && (
+          <div className={`absolute ${align === 'left' ? 'left-0' : 'right-0'} mt-2 w-40 rounded-xl bg-white dark:bg-slate-900 border border-gray-100 dark:border-slate-800 shadow-xl overflow-hidden z-50 animate-fade-in divide-y divide-gray-100 dark:divide-slate-800/40`}>
+            <div className="px-3 py-1.5 bg-slate-50 dark:bg-slate-900/40 text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest leading-none">
+              {t.themeLabel}
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                setTheme('light');
+                setIsThemeDropdownOpen(false);
+              }}
+              className={`w-full px-4 py-2.5 text-left text-xs font-medium transition flex items-center justify-between ${
+                theme === 'light'
+                  ? 'bg-blue-50/50 text-blue-600 dark:bg-blue-950/20 dark:text-blue-400 font-bold'
+                  : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
+              }`}
+            >
+              <span className="flex items-center gap-1.5">
+                <Sun className="w-3.5 h-3.5 text-amber-500" />
+                {uiLang === 'en' ? 'Light' : 'Terang'}
+              </span>
+              {theme === 'light' && <Check className="w-3.5 h-3.5 text-blue-500" />}
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setTheme('dark');
+                setIsThemeDropdownOpen(false);
+              }}
+              className={`w-full px-4 py-2.5 text-left text-xs font-medium transition flex items-center justify-between ${
+                theme === 'dark'
+                  ? 'bg-blue-50/50 text-blue-600 dark:bg-blue-950/20 dark:text-blue-400 font-bold'
+                  : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
+              }`}
+            >
+              <span className="flex items-center gap-1.5">
+                <Moon className="w-3.5 h-3.5 text-indigo-400" />
+                {uiLang === 'en' ? 'Dark' : 'Gelap'}
+              </span>
+              {theme === 'dark' && <Check className="w-3.5 h-3.5 text-blue-500" />}
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setTheme('system');
+                setIsThemeDropdownOpen(false);
+              }}
+              className={`w-full px-4 py-2.5 text-left text-xs font-medium transition flex items-center justify-between ${
+                theme === 'system'
+                  ? 'bg-blue-50/50 text-blue-600 dark:bg-blue-950/20 dark:text-blue-400 font-bold'
+                  : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
+              }`}
+            >
+              <span className="flex items-center gap-1.5">
+                <Monitor className="w-3.5 h-3.5 text-slate-500" />
+                {uiLang === 'en' ? 'System' : 'Sistem'}
+              </span>
+              {theme === 'system' && <Check className="w-3.5 h-3.5 text-blue-500" />}
+            </button>
+          </div>
+        )}
+      </div>
+    );
+  };
+
   const canResume = useMemo(() => {
     return !state.isProcessing && state.currentIndex > 0 && state.currentIndex < originalBlocks.length;
   }, [state.isProcessing, state.currentIndex, originalBlocks.length]);
@@ -947,13 +1091,19 @@ const App: React.FC = () => {
     <div className="min-h-screen w-full bg-slate-50 dark:bg-[#0b0f19] text-slate-900 dark:text-slate-100 transition-colors duration-200 py-10">
       {currentView === 'guide' ? (
         <div className="max-w-4xl mx-auto px-4 py-4">
-          <button 
-            id="guide-back-btn"
-            onClick={() => setCurrentView('app')}
-            className="mb-6 px-4 py-2.5 bg-blue-50 text-blue-600 hover:bg-blue-100 dark:bg-blue-950/40 dark:text-blue-400 font-bold rounded-xl text-xs flex items-center gap-1.5 transition shadow-sm"
-          >
-            {t.backToAppBtn}
-          </button>
+          <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <button 
+              id="guide-back-btn"
+              onClick={() => setCurrentView('app')}
+              className="px-4 py-2.5 bg-blue-50 text-blue-600 hover:bg-blue-100 dark:bg-blue-950/40 dark:text-blue-400 font-bold rounded-xl text-xs flex items-center gap-1.5 self-start transition shadow-sm"
+            >
+              {t.backToAppBtn}
+            </button>
+            <div className="flex items-center gap-2 self-end sm:self-auto">
+              {renderLanguageDropdown()}
+              {renderThemeDropdown()}
+            </div>
+          </div>
           
           <div className="bg-white dark:bg-slate-900 border border-gray-100 dark:border-slate-800 rounded-2xl p-8 shadow-xl">
             <div className="border-b border-gray-100 dark:border-slate-800 pb-6 mb-6">
@@ -1072,13 +1222,19 @@ const App: React.FC = () => {
         </div>
       ) : currentView === 'contact' ? (
         <div className="max-w-4xl mx-auto px-4 py-4">
-          <button 
-            id="contact-back-btn"
-            onClick={() => setCurrentView('app')}
-            className="mb-6 px-4 py-2.5 bg-blue-50 text-blue-600 hover:bg-blue-100 dark:bg-blue-950/40 dark:text-blue-400 font-bold rounded-xl text-xs flex items-center gap-1.5 transition shadow-sm"
-          >
-            {t.backToAppBtn}
-          </button>
+          <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <button 
+              id="contact-back-btn"
+              onClick={() => setCurrentView('app')}
+              className="px-4 py-2.5 bg-blue-50 text-blue-600 hover:bg-blue-100 dark:bg-blue-950/40 dark:text-blue-400 font-bold rounded-xl text-xs flex items-center gap-1.5 self-start transition shadow-sm"
+            >
+              {t.backToAppBtn}
+            </button>
+            <div className="flex items-center gap-2 self-end sm:self-auto">
+              {renderLanguageDropdown()}
+              {renderThemeDropdown()}
+            </div>
+          </div>
           
           <div className="bg-white dark:bg-slate-900 border border-gray-100 dark:border-slate-800 rounded-2xl p-8 shadow-xl">
             <div className="border-b border-gray-100 dark:border-slate-800 pb-6 mb-6">
@@ -1218,7 +1374,7 @@ const App: React.FC = () => {
       ) : currentView === 'donate' ? (
         <div className="max-w-5xl mx-auto px-4 py-4">
           {/* Header & Navigasi */}
-          <div className="mb-6">
+          <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <button 
               id="donate-back-btn"
               onClick={() => setCurrentView('app')}
@@ -1226,6 +1382,10 @@ const App: React.FC = () => {
             >
               {uiLang === 'en' ? '← Back to Application' : '← Kembali ke Aplikasi'}
             </button>
+            <div className="flex items-center gap-2 self-end sm:self-auto">
+              {renderLanguageDropdown()}
+              {renderThemeDropdown()}
+            </div>
           </div>
           
           <div className="bg-white dark:bg-slate-900 border border-gray-100 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl space-y-10">
@@ -1468,142 +1628,10 @@ const App: React.FC = () => {
               </button>
 
               {/* Language Custom Dropdown */}
-              <div className="relative" ref={langRef}>
-                <button
-                  id="lang-dropdown-trigger"
-                  type="button"
-                  onClick={() => setIsLangDropdownOpen(!isLangDropdownOpen)}
-                  className="px-4 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800 border border-gray-200/50 dark:border-slate-800 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 text-slate-700 dark:text-slate-300 shadow-sm"
-                >
-                  <Languages className="w-3.5 h-3.5 text-blue-500" />
-                  <span>{uiLang === 'en' ? 'English' : 'Indonesia'}</span>
-                  <ChevronDown className={`w-3 h-3 transition-transform duration-205 ${isLangDropdownOpen ? 'rotate-180' : ''}`} />
-                </button>
-                
-                {isLangDropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-40 rounded-xl bg-white dark:bg-slate-900 border border-gray-100 dark:border-slate-800 shadow-xl overflow-hidden z-50 animate-fade-in divide-y divide-gray-100 dark:divide-slate-800/40">
-                    <div className="px-3 py-1.5 bg-slate-50 dark:bg-slate-900/40 text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest leading-none">
-                      {t.languageLabel}
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setUiLang('en');
-                        localStorage.setItem('ui_lang', 'en');
-                        setIsLangDropdownOpen(false);
-                      }}
-                      className={`w-full px-4 py-2.5 text-left text-xs font-medium transition flex items-center justify-between ${
-                        uiLang === 'en'
-                          ? 'bg-blue-50/50 text-blue-600 dark:bg-blue-950/20 dark:text-blue-400 font-bold'
-                          : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
-                      }`}
-                    >
-                      <span>English</span>
-                      {uiLang === 'en' && <Check className="w-3.5 h-3.5 text-blue-500" />}
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setUiLang('id');
-                        localStorage.setItem('ui_lang', 'id');
-                        setIsLangDropdownOpen(false);
-                      }}
-                      className={`w-full px-4 py-2.5 text-left text-xs font-medium transition flex items-center justify-between ${
-                        uiLang === 'id'
-                          ? 'bg-blue-50/50 text-blue-600 dark:bg-blue-950/20 dark:text-blue-400 font-bold'
-                          : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
-                      }`}
-                    >
-                      <span>Indonesia</span>
-                      {uiLang === 'id' && <Check className="w-3.5 h-3.5 text-blue-500" />}
-                    </button>
-                  </div>
-                )}
-              </div>
+              {renderLanguageDropdown()}
 
               {/* Theme Custom Dropdown */}
-              <div className="relative" ref={themeRef}>
-                <button
-                  id="theme-dropdown-trigger"
-                  type="button"
-                  onClick={() => setIsThemeDropdownOpen(!isThemeDropdownOpen)}
-                  className="px-4 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-900 dark:hover:bg-slate-800 border border-gray-200/50 dark:border-slate-800 rounded-xl text-xs font-semibold transition flex items-center gap-1.5 text-slate-700 dark:text-slate-300 shadow-sm"
-                >
-                  {theme === 'light' ? (
-                    <Sun className="w-3.5 h-3.5 text-amber-500" />
-                  ) : theme === 'dark' ? (
-                    <Moon className="w-3.5 h-3.5 text-indigo-400" />
-                  ) : (
-                    <Monitor className="w-3.5 h-3.5 text-slate-500" />
-                  )}
-                  <span className="capitalize">
-                    {theme === 'light' ? (uiLang === 'en' ? 'Light' : 'Terang') : theme === 'dark' ? (uiLang === 'en' ? 'Dark' : 'Gelap') : (uiLang === 'en' ? 'System' : 'Sistem')}
-                  </span>
-                  <ChevronDown className={`w-3 h-3 transition-transform duration-205 ${isThemeDropdownOpen ? 'rotate-180' : ''}`} />
-                </button>
-                
-                {isThemeDropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-40 rounded-xl bg-white dark:bg-slate-900 border border-gray-100 dark:border-slate-800 shadow-xl overflow-hidden z-50 animate-fade-in divide-y divide-gray-100 dark:divide-slate-800/40">
-                    <div className="px-3 py-1.5 bg-slate-50 dark:bg-slate-900/40 text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest leading-none">
-                      {t.themeLabel}
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setTheme('light');
-                        setIsThemeDropdownOpen(false);
-                      }}
-                      className={`w-full px-4 py-2.5 text-left text-xs font-medium transition flex items-center justify-between ${
-                        theme === 'light'
-                          ? 'bg-blue-50/50 text-blue-600 dark:bg-blue-950/20 dark:text-blue-400 font-bold'
-                          : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
-                      }`}
-                    >
-                      <span className="flex items-center gap-1.5">
-                        <Sun className="w-3.5 h-3.5 text-amber-500" />
-                        {uiLang === 'en' ? 'Light' : 'Terang'}
-                      </span>
-                      {theme === 'light' && <Check className="w-3.5 h-3.5 text-blue-500" />}
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setTheme('dark');
-                        setIsThemeDropdownOpen(false);
-                      }}
-                      className={`w-full px-4 py-2.5 text-left text-xs font-medium transition flex items-center justify-between ${
-                        theme === 'dark'
-                          ? 'bg-blue-50/50 text-blue-600 dark:bg-blue-950/20 dark:text-blue-400 font-bold'
-                          : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
-                      }`}
-                    >
-                      <span className="flex items-center gap-1.5">
-                        <Moon className="w-3.5 h-3.5 text-indigo-400" />
-                        {uiLang === 'en' ? 'Dark' : 'Gelap'}
-                      </span>
-                      {theme === 'dark' && <Check className="w-3.5 h-3.5 text-blue-500" />}
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setTheme('system');
-                        setIsThemeDropdownOpen(false);
-                      }}
-                      className={`w-full px-4 py-2.5 text-left text-xs font-medium transition flex items-center justify-between ${
-                        theme === 'system'
-                          ? 'bg-blue-50/50 text-blue-600 dark:bg-blue-950/20 dark:text-blue-400 font-bold'
-                          : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
-                      }`}
-                    >
-                      <span className="flex items-center gap-1.5">
-                        <Monitor className="w-3.5 h-3.5 text-slate-500" />
-                        {uiLang === 'en' ? 'System' : 'Sistem'}
-                      </span>
-                      {theme === 'system' && <Check className="w-3.5 h-3.5 text-blue-500" />}
-                    </button>
-                  </div>
-                )}
-              </div>
+              {renderThemeDropdown()}
             </div>
           </div>
 
