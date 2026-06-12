@@ -1177,7 +1177,7 @@ const App: React.FC = () => {
                         value={contactName}
                         onChange={(e) => setContactName(e.target.value)}
                         placeholder={uiLang === 'en' ? 'Your Name' : 'Nama Anda'}
-                        className="w-full px-4 py-2 border border-gray-200 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-blue-500 transition bg-white dark:bg-slate-800 text-slate-955 dark:text-slate-100 text-xs"
+                        className="w-full px-4 py-2 border border-gray-200 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-blue-500 transition bg-white dark:bg-slate-800 text-slate-950 dark:text-slate-100 text-xs"
                       />
                     </div>
                     <div>
@@ -1190,7 +1190,7 @@ const App: React.FC = () => {
                         onChange={(e) => setContactMessage(e.target.value)}
                         placeholder={uiLang === 'en' ? 'Write your notes or feedback here...' : 'Tulis catatan atau saran Anda di sini...'}
                         rows={3}
-                        className="w-full px-4 py-2 border border-gray-200 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-blue-500 transition bg-white dark:bg-slate-800 text-slate-955 dark:text-slate-100 text-xs resize-none"
+                        className="w-full px-4 py-2 border border-gray-200 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-blue-500 transition bg-white dark:bg-slate-800 text-slate-950 dark:text-slate-100 text-xs resize-none"
                       />
                     </div>
                     
@@ -1495,7 +1495,7 @@ const App: React.FC = () => {
                       className={`w-full px-4 py-2.5 text-left text-xs font-medium transition flex items-center justify-between ${
                         uiLang === 'en'
                           ? 'bg-blue-50/50 text-blue-600 dark:bg-blue-950/20 dark:text-blue-400 font-bold'
-                          : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-850'
+                          : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
                       }`}
                     >
                       <span>English</span>
@@ -1510,8 +1510,8 @@ const App: React.FC = () => {
                       }}
                       className={`w-full px-4 py-2.5 text-left text-xs font-medium transition flex items-center justify-between ${
                         uiLang === 'id'
-                          ? 'bg-blue-50/50 text-blue-600 dark:bg-blue-955/20 dark:text-blue-400 font-bold'
-                          : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-850'
+                          ? 'bg-blue-50/50 text-blue-600 dark:bg-blue-950/20 dark:text-blue-400 font-bold'
+                          : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
                       }`}
                     >
                       <span>Indonesia</span>
@@ -1556,7 +1556,7 @@ const App: React.FC = () => {
                       className={`w-full px-4 py-2.5 text-left text-xs font-medium transition flex items-center justify-between ${
                         theme === 'light'
                           ? 'bg-blue-50/50 text-blue-600 dark:bg-blue-950/20 dark:text-blue-400 font-bold'
-                          : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-850'
+                          : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
                       }`}
                     >
                       <span className="flex items-center gap-1.5">
@@ -1573,8 +1573,8 @@ const App: React.FC = () => {
                       }}
                       className={`w-full px-4 py-2.5 text-left text-xs font-medium transition flex items-center justify-between ${
                         theme === 'dark'
-                          ? 'bg-blue-50/50 text-blue-600 dark:bg-blue-955/20 dark:text-blue-400 font-bold'
-                          : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-850'
+                          ? 'bg-blue-50/50 text-blue-600 dark:bg-blue-950/20 dark:text-blue-400 font-bold'
+                          : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
                       }`}
                     >
                       <span className="flex items-center gap-1.5">
@@ -1591,8 +1591,8 @@ const App: React.FC = () => {
                       }}
                       className={`w-full px-4 py-2.5 text-left text-xs font-medium transition flex items-center justify-between ${
                         theme === 'system'
-                          ? 'bg-blue-50/50 text-blue-600 dark:bg-blue-955/20 dark:text-blue-400 font-bold'
-                          : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-850'
+                          ? 'bg-blue-50/50 text-blue-600 dark:bg-blue-950/20 dark:text-blue-400 font-bold'
+                          : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
                       }`}
                     >
                       <span className="flex items-center gap-1.5">
@@ -1670,7 +1670,7 @@ const App: React.FC = () => {
                   value={model} 
                   onChange={(e) => setModel(e.target.value)}
                   disabled={state.isProcessing}
-                  className="w-full px-4 py-2 border border-gray-200 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-blue-500 transition bg-white dark:bg-slate-800 text-slate-955 dark:text-slate-100 text-sm"
+                  className="w-full px-4 py-2 border border-gray-200 dark:border-slate-700 rounded-lg focus:ring-2 focus:ring-blue-500 transition bg-white dark:bg-slate-800 text-slate-950 dark:text-slate-100 text-sm"
                 >
                   {PROVIDER_MODELS[provider].map(opt => (
                     <option key={opt.value} value={opt.value} className="bg-white dark:bg-slate-800">{opt.label}</option>
@@ -1772,7 +1772,7 @@ const App: React.FC = () => {
                           ? t.detectedBlocks.replace('{count}', String(originalBlocks.length))
                           : t.detectedSubtitle.replace('{count}', String(originalBlocks.length))}
                       </p>
-                      <span className="text-[10px] uppercase bg-blue-100 dark:bg-blue-955/40 text-blue-700 dark:text-blue-300 font-bold px-1.5 py-0.5 rounded">
+                      <span className="text-[10px] uppercase bg-blue-100 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 font-bold px-1.5 py-0.5 rounded">
                         {t.formatLabel.replace('{format}', subtitleFormat.toUpperCase())}
                       </span>
                     </div>
