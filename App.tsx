@@ -1234,7 +1234,7 @@ const App: React.FC = () => {
               <div className="w-12 h-12 bg-rose-50 dark:bg-rose-950/30 text-rose-500 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Heart className="w-6 h-6 fill-rose-500 animate-pulse" />
               </div>
-              <h2 className="text-3xl font-extrabold text-blue-500 tracking-tight">
+              <h2 className="text-3xl font-extrabold bg-gradient-to-r from-violet-400 to-purple-600 bg-clip-text text-transparent tracking-tight">
                 {uiLang === 'en' ? 'Support This Project' : 'Dukung Proyek Ini'}
               </h2>
               <p className="text-slate-400 text-sm mt-2 max-w-lg mx-auto leading-relaxed">
