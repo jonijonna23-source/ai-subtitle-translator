@@ -60,34 +60,6 @@
 
 ---
 
-### 💻 Local Installation Guide
-
-To run this application on your local machine, follow these steps:
-
-1.  **Clone the Repository**
-    ```bash
-    git clone <your-repository-url>
-    cd <your-project-folder>
-    ```
-
-2.  **Install Dependencies**
-    *(Make sure you have Node.js installed)*
-    ```bash
-    npm install
-    ```
-
-3.  **Launch the Development Server**
-    ```bash
-    npm run dev
-    ```
-
-4.  **Usage**
-    * Open your browser and navigate to `http://localhost:5173`.
-    * Enter your preferred **API Key** (Gemini, OpenAI, or Groq) in the settings.
-    * Upload your subtitle file (e.g., `.srt`).
-    * Select your target language and click **"Mulai Terjemahkan"** (Start Translation).
-
----
 
 ### 🛠️ Technical Reference
 
