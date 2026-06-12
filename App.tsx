@@ -191,7 +191,7 @@ const LOCALES = {
   },
   id: {
     appName: 'AI Subtitle Translator',
-    appDesc: 'AI Penerjemah subtitle dan teks yang cepat & akurat.',
+    appDesc: 'AI Penerjemah subtitle dan teks yang cepat, akurat, online, dan gratis.',
     userGuideBtn: 'Panduan Pengguna',
     donateBtn: 'Traktir Cendol',
     contactBtn: 'Kontak',
