@@ -2242,7 +2242,7 @@ const App: React.FC = () => {
   )}
 
       <footer className="mt-12 text-center text-slate-400 dark:text-slate-500 text-sm">
-        <p>{uiLang === 'en' ? 'AI Subtitle Translator &copy; 2026. Fast, reliable multi-encoding subtitle translation engine.' : 'AI Subtitle Translator &copy; 2026. Mesin translasi subtitle multi-encoding yang cepat dan andal.'}</p>
+        <p>{uiLang === 'en' ? 'AI Subtitle Translator &copy; Jan, 2026. Fast, reliable multi-encoding subtitle translation engine.' : 'AI Subtitle Translator &copy; Jan, 2026. Mesin translasi subtitle multi-encoding yang cepat dan andal.'}</p>
       </footer>
     </div>
   );
