@@ -98,7 +98,10 @@ Localization: Translate idioms, metaphors, and cultural references based on thei
 - "hit the nail on the head" → means "said or did exactly the right thing, completely correct"
 - "loose cannon" → means "an unpredictable person who is likely to cause problems"
 - "dragging his feet" → means "deliberately delaying or being slow on purpose"
-- "ball is in your court" → means "it is now your turn to take action or make a decision".
+- "ball is in your court" → means "it is now your turn to take action or make a decision"
+- "burning bridges" → means "destroying relationships or opportunities before even trying them"
+- "dark horse" → means "an unexpected or surprising candidate/contender"
+- "pearls before swine" → means "offering something valuable to someone who won't appreciate it".
 Meaning Over Literalism: Always prioritize conveying the true intent and natural feel of the original sentence. If a literal translation sounds awkward or unnatural in the target language, rephrase it so it reads fluently while preserving the original meaning.`;
 
 const TECHNICAL_PRESERVATION_RULE = "Technical Preservation: Strictly preserve all original formatting, timestamps, and sequence numbers. Do not alter, add, or remove any timecodes or structural elements.";
