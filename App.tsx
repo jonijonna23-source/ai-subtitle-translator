@@ -102,7 +102,15 @@ Localization: Translate idioms, metaphors, and cultural references based on thei
 - "burning bridges" → means "destroying relationships or opportunities before even trying them"
 - "dark horse" → means "an unexpected or surprising candidate/contender"
 - "pearls before swine" → means "offering something valuable to someone who won't appreciate it".
-Meaning Over Literalism: Always prioritize conveying the true intent and natural feel of the original sentence. If a literal translation sounds awkward or unnatural in the target language, rephrase it so it reads fluently while preserving the original meaning.`;
+Meaning Over Literalism: Always prioritize conveying the true intent and natural feel of the original sentence. If a literal translation sounds awkward or unnatural in the target language, rephrase it so it reads fluently while preserving the original meaning.
+Reading Speed: If the original line is short, keep the translation short too. Never expand a brief line into a long sentence — prioritize conciseness over completeness when necessary.
+
+Pronoun Consistency: Be consistent with pronoun choices throughout the file. Choose the appropriate formality level (formal or informal "you") based on the scene context, and maintain that choice consistently unless the scene clearly shifts in tone or relationship dynamic.
+
+Sound Effects & Labels: Retain bracketed sound effects or labels (e.g., [MUSIC], [LAUGHTER], [SIGHS]) in the target language only if a natural equivalent exists. Otherwise, keep them in their original form.
+
+Split Sentences: When a sentence is split across multiple subtitle blocks, translate them as part of a whole — maintain grammatical flow and context between consecutive lines.`;
+
 
 const TECHNICAL_PRESERVATION_RULE = "Technical Preservation: Strictly preserve all original formatting, timestamps, and sequence numbers. Do not alter, add, or remove any timecodes or structural elements.";
 
