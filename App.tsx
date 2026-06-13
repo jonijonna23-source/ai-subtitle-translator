@@ -84,7 +84,7 @@ Readability: Keep sentences short, concise, and easy to read quickly on screen.
 
 Contextual Adaptation: Adapt the language level based on the context. Use clean, natural daily conversation for casual scenes, and formal language only when the on-screen context demands it (e.g., news, legal, or formal speeches).
 
-Localization: Localization: Translate idioms, metaphors, and cultural references based on their intended meaning, not word-for-word. Find the most natural equivalent expression in the target language so the emotional nuance, humor, and intent remain fully intact.
+Localization: Translate idioms, metaphors, and cultural references based on their intended meaning, not word-for-word. Example: "Strength is not a closed fist" → should be translated as its meaning ("True strength is not about force or aggression"), not literally. Find the most natural equivalent expression in the target language so the emotional nuance, humor, and intent remain fully intact.
 Meaning Over Literalism: Always prioritize conveying the true intent and natural feel of the original sentence. If a literal translation sounds awkward or unnatural in the target language, rephrase it so it reads fluently while preserving the original meaning.`;
 
 const TECHNICAL_PRESERVATION_RULE = "Technical Preservation: Strictly preserve all original formatting, timestamps, and sequence numbers. Do not alter, add, or remove any timecodes or structural elements.";
