@@ -22,6 +22,7 @@ Core Translation Rules:
 5. Use natural, conversational tone. Adapt idioms and cultural references into natural equivalents.
 6. Keep sentences short and easy to read quickly on screen.
 7. Preserve any formatting tags (e.g. <i>, <b>, {\\an8}) exactly as they appear in the original.
+8. NEVER translate idioms or metaphors word-for-word. Always translate their intended meaning.
 
 ${customInstructions ? `Style & Guidelines:\n${customInstructions}` : ''}`.trim();
 }
