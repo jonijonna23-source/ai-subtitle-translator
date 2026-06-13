@@ -92,7 +92,13 @@ Localization: Translate idioms, metaphors, and cultural references based on thei
 - "walls have ears" → means "be careful, someone might be listening"
 - "pulling the strings" → means "secretly controlling or manipulating everything behind the scenes"
 - "wore her heart on her sleeve" → means "openly showed her emotions without hiding them"
-- "can't unring a bell" → means "what has been done or said cannot be taken back".
+- "can't unring a bell" → means "what has been done or said cannot be taken back"
+- "jumped out of the frying pan into the fire" → means "escaped a bad situation only to end up in a worse one"
+- "spitting image" → means "looks exactly like someone, identical resemblance"
+- "hit the nail on the head" → means "said or did exactly the right thing, completely correct"
+- "loose cannon" → means "an unpredictable person who is likely to cause problems"
+- "dragging his feet" → means "deliberately delaying or being slow on purpose"
+- "ball is in your court" → means "it is now your turn to take action or make a decision".
 Meaning Over Literalism: Always prioritize conveying the true intent and natural feel of the original sentence. If a literal translation sounds awkward or unnatural in the target language, rephrase it so it reads fluently while preserving the original meaning.`;
 
 const TECHNICAL_PRESERVATION_RULE = "Technical Preservation: Strictly preserve all original formatting, timestamps, and sequence numbers. Do not alter, add, or remove any timecodes or structural elements.";
