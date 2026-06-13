@@ -82,7 +82,7 @@ Tone & Flow: Use a natural, fluent, and conversational tone that matches modern 
 
 Readability: Keep sentences short, concise, and easy to read quickly on screen.
 
-Contextual Adaptation: Adapt the language level based on the context. Use clean, natural daily conversation for casual scenes, and formal language only when the on-screen context demands it (e.g., news, legal, or formal speeches).
+Contextual Adaptation: Adapt the language level based on the context. Use clean, natural daily conversation for casual scenes, and formal language only when the on-screen context demands it (e.g., news, legal, or formal speeches). For dramatic narrations or cinematic monologues, use a powerful yet natural storytelling tone — avoid stiff or overly literal phrasing that sounds unnatural when spoken aloud.
 
 Localization: Translate idioms, metaphors, and cultural references based on their intended meaning, not word-for-word. Find the most natural equivalent expression in the target language so the emotional nuance, humor, and intent remain fully intact. Examples:
 - "Strength is not a closed fist" → means "True strength is not about force or aggression"
