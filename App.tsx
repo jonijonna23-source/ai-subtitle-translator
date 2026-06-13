@@ -993,11 +993,12 @@ const App: React.FC = () => {
       const translatedSingle = result[0];
 
       const finalBlocks = [...state.translatedBlocks];
+      const hasText = translatedSingle?.text?.trim().length > 0;
       finalBlocks[blockIndex] = {
         ...blockToTranslate,
-        text: translatedSingle.text,
-        status: 'success',
-        error: null
+        text: hasText ? translatedSingle.text : (blockToTranslate.originalText || blockToTranslate.text),
+        status: hasText ? 'success' : 'error',
+        error: hasText ? null : 'Translation returned empty result. Please retry.'
       };
 
       setState(prev => ({ ...prev, translatedBlocks: finalBlocks }));
@@ -1031,6 +1032,7 @@ const App: React.FC = () => {
     } catch (e) {}
     setFile(null);
     setOriginalBlocks([]);
+    setOriginalRawLines([]);
     setCustomInstructions('');
     setSearchQuery('');
     const isGroq = provider === AIProvider.GROQ || provider === AIProvider.GROQ_FREE;
