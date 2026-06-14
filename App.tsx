@@ -124,8 +124,7 @@ const getInstructionToUse = (customText: string): string => {
   if (!trimmed) {
     return DEFAULT_RULES;
   }
-  // Enforce/lock rule 1 (Technical Preservation), no matter what custom prompt the user entered.
-  return `${TECHNICAL_PRESERVATION_RULE}\n\nAdditional Translation Style Customization:\n${trimmed}`;
+  return `${DEFAULT_RULES}\n\nAdditional Translation Style Customization (override above if conflicting):\n${trimmed}`;
 };
 
 const LOCALES = {
